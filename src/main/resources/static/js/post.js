@@ -52,18 +52,6 @@ function validateForm() {
     return true;
 }
 
-// 삭제 confirm
-//document.addEventListener("DOMContentLoaded", function () {
-//    document.getElementById("postDeleteBtn").addEventListener("click", function (event) {
-//        event.preventDefault();
-//        let deleteUrl = this.getAttribute("href");
-//
-//        if (confirm("삭제하시겠습니까?")) {
-//            window.location.href = deleteUrl;
-//        }
-//    });
-//});
-
 // 투표종료 confirm
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("voteFinished").addEventListener("click", function (event) {
