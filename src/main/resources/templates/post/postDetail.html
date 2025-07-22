@@ -65,7 +65,7 @@
                  th:if="${votePercentage.option1Percentage > 0 or votePercentage.option2Percentage > 0}">
             <div class="post_detail_progress_top">
                 <h2>투표율</h2>
-                <a th:if="${userId != null}" th:style="${dto.voteStatus.toString() == 'FINISHED' ? 'display:none;' : ''}"
+                <a th:if="${userId != null and userId == dto.userId}" th:style="${dto.voteStatus.toString() == 'FINISHED' ? 'display:none;' : ''}"
                    th:href="@{/post/{id}/voteFinished(id=${dto.postId})}" id="voteFinished">투표종료</a>
             </div>
             <div class="post_detail_progress_bottom">
@@ -80,34 +80,37 @@
             </div>
         </section>
         <section class="post_section_bottom">
+            <!-- 왼쪽 버튼 영역 -->
             <div>
-                <a id="postDetailUpdateBtn" th:if="${userId != null}" th:href="@{/post/{id}/update(id=${dto.postId})}">
+                <!-- 내 글이면 수정/삭제 버튼 -->
+                <a id="postDetailUpdateBtn" th:if="${userId != null and userId == dto.userId}" th:href="@{/post/{id}/update(id=${dto.postId})}">
                     <button class="btn_large bg_gray_light post_detail_btn post_detail_update_btn">수정</button>
                 </a>
-                <a th:if="${userId != null}" th:href="@{/post/{id}/delete(id=${dto.postId})}" id="postDeleteBtn">
-                    <button type="button" class="btn_large bg_gray_light post_detail_btn post_detail_delete_btn">삭제
-                    </button>
+                <a th:if="${userId != null and userId == dto.userId}" th:href="@{/post/{id}/delete(id=${dto.postId})}" id="postDeleteBtn">
+                    <button type="button" class="btn_large bg_gray post_detail_btn post_detail_delete_btn">삭제</button>
                 </a>
+
+                <!-- 타인 글이면 신고 버튼 -->
+                <button th:if="${userId == null or userId != dto.userId}"
+                        id="reportBtn" class="btn_large bg_gray_light post_detail_btn post_report_btn">
+                    <i class="fa-solid fa-flag"></i> 신고
+                </button>
             </div>
+
+            <!-- 오른쪽 버튼 영역: 채팅은 모두 표시 -->
             <div>
                 <button id="open-chat-profile-popup" class="btn_large bg_pink post_detail_btn post_detail_chat_btn">
-<!--                    <i class="fa-solid fa-comment-dots"></i> 채팅-->
-                    채팅
+                    <i class="fa-solid fa-comment-dots"></i> 채팅
+<!--                    채팅-->
                 </button>
             </div>
         </section>
-
-        <div>
-            <button id="reportBtn" class="btn_large bg_gray_light post_detail_btn post_report_btn">
-                <i class="fa-solid fa-flag"></i> 신고
-            </button>
-        </div>
 
         <div id="popup-section" class="popup_section">
             <div class="dim_box"></div>
             <div id="toast-popup-box" class="toast_popup_box">
                 <div class="popup_header">
-                    <p>채팅프로필 설정</p>
+                    <p>채팅 프로필 설정</p>
                     <i id="close-chat-profile-popup" class="close_popup_btn fa-solid fa-xmark"></i>
                 </div>
                 <div class="toast_popup_content">
@@ -138,7 +141,7 @@
                             </label>
                         </fieldset>
                     </div>
-                    <button id="btn-join-chat" class="btn_medium btn_join_chat" th:data-post-id="${dto.postId}">입장하기</button>
+                    <button id="btn-join-chat" class="btn_large btn_join_chat" th:data-post-id="${dto.postId}">입장하기</button>
                 </div>
             </div>
         </div>
