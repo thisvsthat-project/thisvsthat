@@ -238,10 +238,24 @@ button {
     text-align: center;
 }
 
+.post_detail_btn i {
+    font-size: 15px;
+    margin-right: 3px;
+}
+
 .post_detail_update_btn, .post_detail_delete_btn {
     color: black;
     margin-right: 5px;
 }
+
+.post_report_btn {
+    color: black;
+}
+
+.post_report_btn i {
+    font-size: 14px;
+}
+
 /* postDetail.html 끝 */
 
 /* updatePost.html 시작 */
