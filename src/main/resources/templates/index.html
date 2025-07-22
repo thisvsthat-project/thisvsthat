@@ -66,12 +66,12 @@
                 <div class="keyword_box">
                     <a th:href="@{/(search_by=${searchBy}, keyword=${keyword}, list_category='', list_desc=${listDesc}, vote_status=${voteStatus}, start_date=${startDate}, end_date=${endDate})}"
                        class="keyword" th:classappend="${listCategory == ''} ? 'active' : ''">전체</a>
+                    <a th:href="@{/(search_by=${searchBy}, keyword=${keyword}, list_category='자유', list_desc=${listDesc}, vote_status=${voteStatus}, start_date=${startDate}, end_date=${endDate})}"
+                       class="keyword" th:classappend="${listCategory == '자유'} ? 'active' : ''">자유</a>
                     <a th:href="@{/(search_by=${searchBy}, keyword=${keyword}, list_category='고민', list_desc=${listDesc}, vote_status=${voteStatus}, start_date=${startDate}, end_date=${endDate})}"
                        class="keyword" th:classappend="${listCategory == '고민'} ? 'active' : ''">고민</a>
                     <a th:href="@{/(search_by=${searchBy}, keyword=${keyword}, list_category='토론', list_desc=${listDesc}, vote_status=${voteStatus}, start_date=${startDate}, end_date=${endDate})}"
                        class="keyword" th:classappend="${listCategory == '토론'} ? 'active' : ''">토론</a>
-                    <a th:href="@{/(search_by=${searchBy}, keyword=${keyword}, list_category='자유', list_desc=${listDesc}, vote_status=${voteStatus}, start_date=${startDate}, end_date=${endDate})}"
-                       class="keyword" th:classappend="${listCategory == '자유'} ? 'active' : ''">자유</a>
                 </div>
             </div>
         </section>
