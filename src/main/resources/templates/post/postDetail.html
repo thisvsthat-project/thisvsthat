@@ -87,7 +87,7 @@
                     <button class="btn_large bg_gray_light post_detail_btn post_detail_update_btn">수정</button>
                 </a>
                 <a th:if="${userId != null and userId == dto.userId}" th:href="@{/post/{id}/delete(id=${dto.postId})}" id="postDeleteBtn">
-                    <button type="button" class="btn_large bg_gray post_detail_btn post_detail_delete_btn">삭제</button>
+                    <button type="button" class="btn_large bg_gray_light post_detail_btn post_detail_delete_btn">삭제</button>
                 </a>
 
                 <!-- 타인 글이면 신고 버튼 -->
@@ -101,7 +101,6 @@
             <div>
                 <button id="open-chat-profile-popup" class="btn_large bg_pink post_detail_btn post_detail_chat_btn">
                     <i class="fa-solid fa-comment-dots"></i> 채팅
-<!--                    채팅-->
                 </button>
             </div>
         </section>
