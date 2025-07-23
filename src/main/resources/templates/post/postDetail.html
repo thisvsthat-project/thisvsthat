@@ -35,9 +35,11 @@
             <section class="post_choose_section">
                 <div class="choose_top_box">
                     <a href="#" class="option1_img" onclick="selectOption('OPTION_1')"><img
-                            th:src="${dto.option1ImageUrl}" alt=""/></a>
+                            th:src="${dto.option1ImageUrl}" alt=""
+                            onerror="this.onerror=null; if (!/\.\w{2,4}$/.test(this.src)) this.src='/images/common/icon-letter-o.png';"/></a>
                     <a href="#" class="option2_img" onclick="selectOption('OPTION_2')"><img
-                            th:src="${dto.option2ImageUrl}" alt=""/></a>
+                            th:src="${dto.option2ImageUrl}" alt=""
+                            onerror="this.onerror=null; if (!/\.\w{2,4}$/.test(this.src)) this.src='/images/common/icon-letter-x.png';"/></a>
                 </div>
                 <div class="choose_bottom_box">
                     <fieldset>
@@ -65,7 +67,8 @@
                  th:if="${votePercentage.option1Percentage > 0 or votePercentage.option2Percentage > 0}">
             <div class="post_detail_progress_top">
                 <h2>투표율</h2>
-                <a th:if="${userId != null and userId == dto.userId}" th:style="${dto.voteStatus.toString() == 'FINISHED' ? 'display:none;' : ''}"
+                <a th:if="${userId != null and userId == dto.userId}"
+                   th:style="${dto.voteStatus.toString() == 'FINISHED' ? 'display:none;' : ''}"
                    th:href="@{/post/{id}/voteFinished(id=${dto.postId})}" id="voteFinished">투표종료</a>
             </div>
             <div class="post_detail_progress_bottom">
@@ -114,7 +117,8 @@
                 </div>
                 <div class="toast_popup_content">
                     <div class="profile_image_wrapper">
-                        <img id="profile-image" class="profile_image" src="/images/common/profile-default.png" alt="profile-image">
+                        <img id="profile-image" class="profile_image" src="/images/common/profile-default.png"
+                             alt="profile-image">
                         <i id="edit-icon" class="fa-solid fa-pencil image_edit_icon"></i>
                     </div>
                     <input type="file" id="profile-input" style="display: none;" accept="image/*">
@@ -140,7 +144,8 @@
                             </label>
                         </fieldset>
                     </div>
-                    <button id="btn-join-chat" class="btn_large btn_join_chat" th:data-post-id="${dto.postId}">입장하기</button>
+                    <button id="btn-join-chat" class="btn_large btn_join_chat" th:data-post-id="${dto.postId}">입장하기
+                    </button>
                 </div>
             </div>
         </div>
