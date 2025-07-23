@@ -179,32 +179,34 @@
         document.addEventListener("DOMContentLoaded", function () {
             const reportBtn = document.getElementById("reportBtn");
 
-            // 신고 버튼 클릭 시 AJAX 요청
-            reportBtn.addEventListener("click", function() {
-                const postId = [[${dto.postId}]];  // 게시물 ID
+            if (reportBtn) {
+                // 신고 버튼 클릭 시 AJAX 요청
+                reportBtn.addEventListener("click", function() {
+                    const postId = [[${dto.postId}]];  // 게시물 ID
 
-                // AJAX 요청
-                $.ajax({
-                    type: "POST",
-                    url: "/post/" + postId + "/report",  // ReportController의 신고 처리 URL
-                    data: { postId: postId },
-                    success: function(response) {
-                        if (response.success) {
-                            // 신고 성공
-                            alert(response.message);  // '게시물을 신고하였습니다.'
-                            reportBtn.disabled = true;  // 신고 후 버튼 비활성화
-                        } else {
-                            // 중복 신고
-                            alert(response.message);  // '이미 신고한 게시물입니다.'
+                    // AJAX 요청
+                    $.ajax({
+                        type: "POST",
+                        url: "/post/" + postId + "/report",  // ReportController의 신고 처리 URL
+                        data: { postId: postId },
+                        success: function(response) {
+                            if (response.success) {
+                                // 신고 성공
+                                alert(response.message);  // '게시물을 신고하였습니다.'
+                                reportBtn.disabled = true;  // 신고 후 버튼 비활성화
+                            } else {
+                                // 중복 신고
+                                alert(response.message);  // '이미 신고한 게시물입니다.'
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Error 응답을 JSON 파싱 후 message 표시
+                            const errorResponse = JSON.parse(xhr.responseText);
+                            alert(errorResponse.message);  // '중복 신고입니다.' 표시
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        // Error 응답을 JSON 파싱 후 message 표시
-                        const errorResponse = JSON.parse(xhr.responseText);
-                        alert(errorResponse.message);  // '중복 신고입니다.' 표시
-                    }
+                    });
                 });
-            });
+            }
 
             window.votePercentage = {
                 option1Percentage: [[${votePercentage.option1Percentage}]],
@@ -214,22 +216,26 @@
             const updateBtn = document.getElementById("postDetailUpdateBtn");
             const deleteBtn = document.getElementById("postDeleteBtn");
 
-            updateBtn.addEventListener("click", function (event) {
-                if (window.votePercentage.option1Percentage > 0 || window.votePercentage.option2Percentage > 0) {
-                alert("투표가 이미 진행된 게시글은 수정할 수 없습니다.");
-                event.preventDefault();
-                }
-            });
+            if (updateBtn) {
+                updateBtn.addEventListener("click", function (event) {
+                    if (window.votePercentage.option1Percentage > 0 || window.votePercentage.option2Percentage > 0) {
+                        alert("투표가 이미 진행된 게시글은 수정할 수 없습니다.");
+                        event.preventDefault();
+                    }
+                });
+            }
 
-            deleteBtn.addEventListener("click", function (event) {
-                let deleteUrl = this.getAttribute("href");
-                if (window.votePercentage.option1Percentage > 0 || window.votePercentage.option2Percentage > 0) {
-                alert("투표가 이미 진행된 게시글은 삭제할 수 없습니다.");
-                event.preventDefault();
-                } else if (confirm("삭제하시겠습니까?")) {
-                    window.location.href = deleteUrl;
-                }
-            });
+            if (deleteBtn) {
+                deleteBtn.addEventListener("click", function (event) {
+                    const deleteUrl = this.getAttribute("href");
+                    if (window.votePercentage.option1Percentage > 0 || window.votePercentage.option2Percentage > 0) {
+                        alert("투표가 이미 진행된 게시글은 삭제할 수 없습니다.");
+                        event.preventDefault();
+                    } else if (confirm("삭제하시겠습니까?")) {
+                        window.location.href = deleteUrl;
+                    }
+                });
+            }
         });
     </script>
 </div>
