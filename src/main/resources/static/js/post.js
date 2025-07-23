@@ -54,14 +54,18 @@ function validateForm() {
 
 // 투표종료 confirm
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("voteFinished").addEventListener("click", function (event) {
-        event.preventDefault();
-        let url = this.getAttribute("href");
+    const voteFinishedBtn = document.getElementById("voteFinished");
 
-        if (confirm("투표를 종료 하시겠습니까?\n투표종료 시 게시글을 삭제할 수 없습니다")) {
-            window.location.href = url;
-        }
-    });
+    if (voteFinishedBtn) {
+        voteFinishedBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+            const url = this.getAttribute("href");
+
+            if (confirm("투표를 종료 하시겠습니까?\n투표종료 시 게시글을 삭제할 수 없습니다")) {
+                window.location.href = url;
+            }
+        });
+    }
 });
 
 // 해시태그 변환
