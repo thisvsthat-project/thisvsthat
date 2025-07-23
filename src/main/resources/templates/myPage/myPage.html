@@ -26,7 +26,7 @@
 
         <section class="myPage_section">
             <div class="myPage_top">
-                <h2> 1. 정보 수정 </h2>
+                <h2> 정보 수정 </h2>
             </div>
             <div class="myPage_bottom myPage_bottom_flex_wrap">
                 <h3> 닉네임 </h3>
@@ -48,7 +48,7 @@
 
         <section class="myPage_section">
             <div class="myPage_top">
-                <h2> 2. 투표한 글 </h2>
+                <h2> 투표한 글 </h2>
             </div>
             <div class="myPage_bottom">
                 <th:block th:each="post : ${votedPosts}">
@@ -60,9 +60,9 @@
                             </div>
                             <div class="choose_top_box">
                                 <!-- 이미지 표시 -->
-                                <img th:src="${post.option1ImageUrl != null ? post.option1ImageUrl : '/images/common/icon-blue.png'}"
+                                <img th:src="${post.option1ImageUrl != null ? post.option1ImageUrl : '/images/common/icon-letter-o.png'}"
                                      th:class="${post.userSelectedOption == 'OPTION_1' ? 'selected' : 'dimmed'}" alt=""/>
-                                <img th:src="${post.option2ImageUrl != null ? post.option2ImageUrl : '/images/common/icon-orange.png'}"
+                                <img th:src="${post.option2ImageUrl != null ? post.option2ImageUrl : '/images/common/icon-letter-x.png'}"
                                      th:class="${post.userSelectedOption == 'OPTION_2' ? 'selected' : 'dimmed'}" alt=""/>
                             </div>
                             <div class="choose_bottom_box">
@@ -95,15 +95,15 @@
 
         <section class="myPage_section">
             <div class="myPage_top">
-                <h2> 3. 내가 올린 글 </h2>
+                <h2> 내가 올린 글 </h2>
             </div>
             <div class="myPage_posts">
                 <!-- 내가 올린 게시물 리스트 -->
                 <section th:each="post : ${myPosts}" class="myPage_post" style="max-width: 400px;">
                     <a th:href="@{'/post/' + ${post.postId}}" class="choose_total">
                         <div class="choose_top_box">
-                            <img th:src="${post.option1ImageUrl != null ? post.option1ImageUrl : '/images/common/icon-blue.png'}" alt=""/>
-                            <img th:src="${post.option2ImageUrl != null ? post.option2ImageUrl : '/images/common/icon-orange.png'}" alt=""/>
+                            <img th:src="${post.option1ImageUrl != null ? post.option1ImageUrl : '/images/common/icon-letter-o.png'}" alt=""/>
+                            <img th:src="${post.option2ImageUrl != null ? post.option2ImageUrl : '/images/common/icon-letter-x.png'}" alt=""/>
                         </div>
                         <div class="choose_bottom_box">
                             <p class="shorten" th:text="${post.title}">제목</p>
@@ -122,7 +122,7 @@
 
         <section class="myPage_section">
             <div class="myPage_top">
-                <h2> 4. 참여했던 채팅방 </h2>
+                <h2> 참여한 채팅방 </h2>
             </div>
             <div class="myPage_bottom">
                 <ul>
@@ -134,7 +134,7 @@
 
                 <!-- 내가 참여한 채팅방이 없다면 메시지 출력 -->
                 <div th:if="${#lists.isEmpty(participatedPosts)}">
-                    <p>참여했던 채팅방이 없습니다.</p>
+                    <p>참여 중인 채팅방이 없습니다.</p>
                 </div>
             </div>
         </section>
@@ -149,7 +149,7 @@
         </div>
     </article>
 
-    <script th:src="@{/js/post.js}"></script>
+    <script th:src="@{/js/myPage.js}"></script>
 </div>
 </body>
 </html>

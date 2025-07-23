@@ -67,7 +67,7 @@
                  th:if="${votePercentage.option1Percentage > 0 or votePercentage.option2Percentage > 0}">
             <div class="post_detail_progress_top">
                 <h2>투표율</h2>
-                <a th:if="${userId != null}"
+                <a th:if="${userId != null and userId == dto.userId}"
                    th:style="${dto.voteStatus.toString() == 'FINISHED' ? 'display:none;' : ''}"
                    th:href="@{/post/{id}/voteFinished(id=${dto.postId})}" id="voteFinished">투표종료</a>
             </div>
@@ -83,32 +83,36 @@
             </div>
         </section>
         <section class="post_section_bottom">
+            <!-- 왼쪽 버튼 영역 -->
             <div>
-                <a id="postDetailUpdateBtn" th:if="${userId != null}" th:href="@{/post/{id}/update(id=${dto.postId})}">
+                <!-- 내 글이면 수정/삭제 버튼 -->
+                <a id="postDetailUpdateBtn" th:if="${userId != null and userId == dto.userId}" th:href="@{/post/{id}/update(id=${dto.postId})}">
                     <button class="btn_large bg_gray_light post_detail_btn post_detail_update_btn">수정</button>
                 </a>
-                <a th:if="${userId != null}" th:href="@{/post/{id}/delete(id=${dto.postId})}" id="postDeleteBtn">
-                    <button type="button" class="btn_large bg_gray_light post_detail_btn post_detail_delete_btn">삭제
-                    </button>
+                <a th:if="${userId != null and userId == dto.userId}" th:href="@{/post/{id}/delete(id=${dto.postId})}" id="postDeleteBtn">
+                    <button type="button" class="btn_large bg_gray_light post_detail_btn post_detail_delete_btn">삭제</button>
                 </a>
+
+                <!-- 타인 글이면 신고 버튼 -->
+                <button th:if="${userId == null or userId != dto.userId}"
+                        id="reportBtn" class="btn_large bg_gray_light post_detail_btn post_report_btn">
+                    <i class="fa-solid fa-flag"></i> 신고
+                </button>
             </div>
+
+            <!-- 오른쪽 버튼 영역: 채팅은 모두 표시 -->
             <div>
-                <button id="open-chat-profile-popup" class="btn_large bg_pink post_detail_btn post_detail_chat_btn">채팅
+                <button id="open-chat-profile-popup" class="btn_large bg_pink post_detail_btn post_detail_chat_btn">
+                    <i class="fa-solid fa-comment-dots"></i> 채팅
                 </button>
             </div>
         </section>
-
-        <div>
-            <button id="reportBtn" class="btn_large post_report_btn">
-                <i class="fa-solid fa-flag"></i> 신고
-            </button>
-        </div>
 
         <div id="popup-section" class="popup_section">
             <div class="dim_box"></div>
             <div id="toast-popup-box" class="toast_popup_box">
                 <div class="popup_header">
-                    <p>채팅프로필 설정</p>
+                    <p>채팅 프로필 설정</p>
                     <i id="close-chat-profile-popup" class="close_popup_btn fa-solid fa-xmark"></i>
                 </div>
                 <div class="toast_popup_content">
@@ -140,7 +144,7 @@
                             </label>
                         </fieldset>
                     </div>
-                    <button id="btn-join-chat" class="btn_medium btn_join_chat" th:data-post-id="${dto.postId}">입장하기
+                    <button id="btn-join-chat" class="btn_large btn_join_chat" th:data-post-id="${dto.postId}">입장하기
                     </button>
                 </div>
             </div>
@@ -180,32 +184,34 @@
         document.addEventListener("DOMContentLoaded", function () {
             const reportBtn = document.getElementById("reportBtn");
 
-            // 신고 버튼 클릭 시 AJAX 요청
-            reportBtn.addEventListener("click", function() {
-                const postId = [[${dto.postId}]];  // 게시물 ID
+            if (reportBtn) {
+                // 신고 버튼 클릭 시 AJAX 요청
+                reportBtn.addEventListener("click", function() {
+                    const postId = [[${dto.postId}]];  // 게시물 ID
 
-                // AJAX 요청
-                $.ajax({
-                    type: "POST",
-                    url: "/post/" + postId + "/report",  // ReportController의 신고 처리 URL
-                    data: { postId: postId },
-                    success: function(response) {
-                        if (response.success) {
-                            // 신고 성공
-                            alert(response.message);  // '게시물을 신고하였습니다.'
-                            reportBtn.disabled = true;  // 신고 후 버튼 비활성화
-                        } else {
-                            // 중복 신고
-                            alert(response.message);  // '이미 신고한 게시물입니다.'
+                    // AJAX 요청
+                    $.ajax({
+                        type: "POST",
+                        url: "/post/" + postId + "/report",  // ReportController의 신고 처리 URL
+                        data: { postId: postId },
+                        success: function(response) {
+                            if (response.success) {
+                                // 신고 성공
+                                alert(response.message);  // '게시물을 신고하였습니다.'
+                                reportBtn.disabled = true;  // 신고 후 버튼 비활성화
+                            } else {
+                                // 중복 신고
+                                alert(response.message);  // '이미 신고한 게시물입니다.'
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Error 응답을 JSON 파싱 후 message 표시
+                            const errorResponse = JSON.parse(xhr.responseText);
+                            alert(errorResponse.message);  // '중복 신고입니다.' 표시
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        // Error 응답을 JSON 파싱 후 message 표시
-                        const errorResponse = JSON.parse(xhr.responseText);
-                        alert(errorResponse.message);  // '중복 신고입니다.' 표시
-                    }
+                    });
                 });
-            });
+            }
 
             window.votePercentage = {
                 option1Percentage: [[${votePercentage.option1Percentage}]],
@@ -215,22 +221,26 @@
             const updateBtn = document.getElementById("postDetailUpdateBtn");
             const deleteBtn = document.getElementById("postDeleteBtn");
 
-            updateBtn.addEventListener("click", function (event) {
-                if (window.votePercentage.option1Percentage > 0 || window.votePercentage.option2Percentage > 0) {
-                alert("투표가 이미 진행된 게시글은 수정할 수 없습니다.");
-                event.preventDefault();
-                }
-            });
+            if (updateBtn) {
+                updateBtn.addEventListener("click", function (event) {
+                    if (window.votePercentage.option1Percentage > 0 || window.votePercentage.option2Percentage > 0) {
+                        alert("투표가 이미 진행된 게시글은 수정할 수 없습니다.");
+                        event.preventDefault();
+                    }
+                });
+            }
 
-            deleteBtn.addEventListener("click", function (event) {
-                let deleteUrl = this.getAttribute("href");
-                if (window.votePercentage.option1Percentage > 0 || window.votePercentage.option2Percentage > 0) {
-                alert("투표가 이미 진행된 게시글은 삭제할 수 없습니다.");
-                event.preventDefault();
-                } else if (confirm("삭제하시겠습니까?")) {
-                    window.location.href = deleteUrl;
-                }
-            });
+            if (deleteBtn) {
+                deleteBtn.addEventListener("click", function (event) {
+                    const deleteUrl = this.getAttribute("href");
+                    if (window.votePercentage.option1Percentage > 0 || window.votePercentage.option2Percentage > 0) {
+                        alert("투표가 이미 진행된 게시글은 삭제할 수 없습니다.");
+                        event.preventDefault();
+                    } else if (confirm("삭제하시겠습니까?")) {
+                        window.location.href = deleteUrl;
+                    }
+                });
+            }
         });
     </script>
 </div>
