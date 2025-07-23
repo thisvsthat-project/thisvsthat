@@ -1,7 +1,7 @@
-package com.project.thisvsthat.chat.config;
+package com.project.thisvsthat.chat.redis.config;
 
 import com.project.thisvsthat.chat.dto.ChatMessage;
-import com.project.thisvsthat.chat.util.RedisSubscriber;
+import com.project.thisvsthat.chat.redis.pubsub.RedisSubscriber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +11,6 @@ import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
@@ -40,16 +39,11 @@ public class RedisConfig {
         return new LettuceConnectionFactory(config);
     }
 
-    // 기본 RedisTemplate 설정 (Object 타입 저장)
+    // 기본 RedisTemplate 설정
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory());
-
-        // 키와 값 직렬화 방식 설정
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());  // 값 직렬화 JSON
-
         return template;
     }
 
